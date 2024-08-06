@@ -1,5 +1,5 @@
 from .utilityFunctions import generateUniqueID, askMenu, check_date
-from lib.mySQLFunctions import add_author_to_database, search_database_for_author_by_name, delete_author_from_database_by_id, get_all_authors, add_genre_to_database,search_database_for_genre_by_name, delete_genre_from_database_by_id, get_all_genres, add_book_to_database, search_database_for_book_by_name, delete_book_from_database_by_id, get_all_books, add_member_to_database, search_database_for_member_by_name, delete_member_from_database_by_id, get_all_members, update_book, add_borrowed_book_to_database, delete_borrowed_book_from_database_by_id, search_database_for_borrowed_book_by_book_id, search_database_for_borrowed_book_by_member_id, search_database_for_borrowed_book_by_id, get_all_borrowed_books, search_database_for_book_by_id
+from lib.mySQLFunctions import add_author_to_database, search_database_for_author_by_name, delete_author_from_database_by_id, get_all_authors, add_genre_to_database,search_database_for_genre_by_name, delete_genre_from_database_by_id, get_all_genres, add_book_to_database, search_database_for_book_by_name, delete_book_from_database_by_id, get_all_books, add_member_to_database, search_database_for_member_by_name, delete_member_from_database_by_id, get_all_members, update_book, add_borrowed_book_to_database, delete_borrowed_book_from_database_by_id, search_database_for_borrowed_book_by_book_id, search_database_for_borrowed_book_by_member_id, search_database_for_borrowed_book_by_id, get_all_borrowed_books, search_database_for_book_by_id, update_genre, update_member, update_author
 from classes.book import Book
 from classes.member import Member
 from classes.author import Author
@@ -122,6 +122,75 @@ def edit_book():
     elif user_input == 4:#quit to main menu
         return -1
     update_book(book)
+
+def edit_genre():
+    genre = select_genre()
+    user_input = askMenu([
+        "Name", 
+        "Description",
+        "Category",
+        "Quit to main menu"], 
+        "Please choose what to edit: ")
+    if user_input == 1:
+        new_name = str(input("Please enter new name: "))
+        success = genre.update_genre_name(new_name)
+        while success == -1:
+            genre.update_genre_name(new_name)
+    elif user_input == 2:
+        new_description = str(input("Please enter new description: "))
+        success = genre.update_genre_description(new_description)
+        while success == -1:
+            genre.update_genre_description(new_description)
+    elif user_input == 3:
+        new_category = str(input("Please enter new category: "))
+        success = genre.update_genre_category(new_category)
+        while success == -1:
+            genre.update_genre_category(new_category)
+    elif user_input == 4:#quit to main menu
+        return -1
+    update_genre(genre)
+
+def edit_author():
+    author = select_author()
+    user_input = askMenu([
+        "Name", 
+        "Description",
+        "Quit to main menu"], 
+        "Please choose what to edit: ")
+    if user_input == 1:
+        new_name = str(input("Please enter new name: "))
+        success = author.update_author_name(new_name)
+        while success == -1:
+            author.update_author_name(new_name)
+    elif user_input == 2:
+        new_description = str(input("Please enter new description: "))
+        success = author.update_author_description(new_description)
+        while success == -1:
+            author.update_author_description(new_description)
+    elif user_input == 3:#quit to main menu
+        return -1
+    update_author(author)
+
+def edit_member():
+    member = select_member()
+    user_input = askMenu([
+        "Name", 
+        "Library ID"
+        "Quit to main menu"], 
+        "Please choose what to edit: ")
+    if user_input == 1:
+        new_name = str(input("Please enter new name: "))
+        success = member.update_member_name(new_name)
+        while success == -1:
+            member.update_member_name(new_name)
+    elif user_input == 2:
+        new_description = int(input("Please enter new library ID (10 digit limit): "))
+        success = member.update_library_id(new_description)
+        while success == -1:
+            member.update_library_id(new_description)
+    elif user_input == 3:#quit to main menu
+        return -1
+    update_member(member)
 
 def select_book():
     books = ""

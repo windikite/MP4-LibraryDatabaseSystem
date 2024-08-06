@@ -23,9 +23,9 @@ class Author:
             print("Please make sure the new name is a string that is longer than 0 characters.")
             return -1
     
-    def update_bio(self, new_bio):
-        if isinstance(new_bio, str) and len(new_bio) > 0:
-            self.author_description = new_bio
+    def update_author_description(self, author_description):
+        if isinstance(author_description, str) and len(author_description) > 0:
+            self.author_description = author_description
             return 1
         else:
             print("Please make sure the new author_description is a string that is longer than 0 characters.")

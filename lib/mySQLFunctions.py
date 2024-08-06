@@ -99,7 +99,7 @@ def delete_author_from_database_by_id(id_to_delete):
     if found:
         query = "DELETE FROM Authors WHERE id = %s"
         variables = (id_to_delete, )
-        error_message = "Unable to modify database!"
+        error_message = "Unable to modify database! Author likely in use by book which prevents deletion."
         results = execute_change(query, variables, error_message)
         if results != -1:
             print("Deleted entry!")
@@ -107,6 +107,30 @@ def delete_author_from_database_by_id(id_to_delete):
             print("Failed to delete author!")
         return results
     else:
+        return -1
+    
+def update_author(author):
+    conn = connect_to_database()
+    if conn is not None:
+        try:
+            cursor = conn.cursor()
+            name = author.get_author_name()
+            description = author.get_author_description()
+            author_id = author.get_author_id()
+            found_author = search_database_for_author_by_id(author_id)
+            if found_author == -1:
+                print("Author not found!")
+                return -1
+            updated_book = (name, description, author_id)
+            query = "UPDATE Authors SET name = %s, biography = %s WHERE id = %s"
+            cursor.execute(query, updated_book)
+            conn.commit()
+            print("Author details updated successfully.")
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        print("Unable to connect to database!")
         return -1
 
 # genre functions
@@ -156,10 +180,11 @@ def get_all_genres():
 
 def delete_genre_from_database_by_id(id_to_delete):
     found = search_database_for_genre_by_id(id_to_delete)
+    print(id_to_delete)
     if found:
         query = "DELETE FROM Genres WHERE id = %s"
         variables = (id_to_delete, )
-        error_message = "Unable to modify database!"
+        error_message = "Unable to modify database! Genre likely in use by book which prevents deletion."
         results = execute_change(query, variables, error_message)
         if results != -1:
             print("Deleted entry!")
@@ -167,6 +192,31 @@ def delete_genre_from_database_by_id(id_to_delete):
             print("Failed to delete genre!")
         return results
     else:
+        return -1
+
+def update_genre(genre):
+    conn = connect_to_database()
+    if conn is not None:
+        try:
+            cursor = conn.cursor()
+            name = genre.get_genre_name()
+            description = genre.get_genre_description()
+            category = genre.get_genre_category()
+            genre_id = genre.get_genre_id()
+            found_genre = search_database_for_genre_by_id(genre_id)
+            if found_genre == -1:
+                print("Genre not found!")
+                return -1
+            updated_book = (name, description, category, genre_id)
+            query = "UPDATE Genres SET name = %s, description = %s, category = %s WHERE id = %s"
+            cursor.execute(query, updated_book)
+            conn.commit()
+            print("Genre details updated successfully.")
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        print("Unable to connect to database!")
         return -1
 
 # book functions
@@ -223,7 +273,7 @@ def delete_book_from_database_by_id(id_to_delete):
     if found:
         query = "DELETE FROM Books WHERE id = %s"
         variables = (id_to_delete, )
-        error_message = "Unable to modify database!"
+        error_message = "Unable to modify database! Book is likely being borrowed which prevents deletion."
         results = execute_change(query, variables, error_message)
         if results != -1:
             print("Deleted entry!")
@@ -315,6 +365,30 @@ def delete_member_from_database_by_id(id_to_delete):
             print("Failed to delete member!")
         return results
     else:
+        return -1
+
+def update_member(member):
+    conn = connect_to_database()
+    if conn is not None:
+        try:
+            cursor = conn.cursor()
+            name = member.get_member_name()
+            library_id = member.get_library_id()
+            member_id = member.get_member_id()
+            found_member = search_database_for_member_by_id(member_id)
+            if found_member == -1:
+                print("Member not found!")
+                return -1
+            updated_book = (name, library_id, member_id)
+            query = "UPDATE Members SET name = %s, library_id = %s WHERE id = %s"
+            cursor.execute(query, updated_book)
+            conn.commit()
+            print("Member details updated successfully.")
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        print("Unable to connect to database!")
         return -1
 
 # borrowed_book functions
